@@ -14,12 +14,19 @@ def main():
 	client.loop_start()
 
 	counter = 0
-	while True:
-		message = f"🔁 Message {counter}"
-		client.publish(TOPIC, message)
-		print(f"📤 Publié sur {TOPIC} : {message}", flush=True)
-		counter += 1
-		time.sleep(3)
+	try:
+		while True:
+			message = f"🔁 Message {counter}"
+			client.publish(TOPIC, message)
+			print(f"📤 Publié sur {TOPIC} : {message}", flush=True)
+			counter += 1
+			time.sleep(3)
+	except KeyboardInterrupt:
+		print("Ctrl + C")
+	finally:
+		client.loop_stop()
+		client.disconnect()
+		print("✅ Déconnecté proprement")
 
 if __name__ == "__main__":
 	main()

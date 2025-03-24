@@ -1,0 +1,67 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Logs Viewer</title>
+    <style>
+        body { font-family: monospace; background: #111; color: #0f0; padding: 1rem; }
+        pre { background: #000; padding: 1rem; overflow-x: auto; max-height: 80vh; }
+        select, button { font-size: 1rem; margin: 0.5rem; }
+    </style>
+</head>
+<body>
+    <h1>📄 Log Viewer</h1>
+    <div>
+        <label>Dossier :</label>
+        <select id="folderSelect"></select>
+
+        <label>Fichier :</label>
+        <select id="fileSelect"></select>
+
+        <button onclick="loadLog()">🔄 Charger</button>
+    </div>
+    <pre id="logOutput">Sélectionne un fichier pour afficher les logs</pre>
+
+    <script>
+        async function fetchLogs() {
+            const res = await fetch("/logs");
+            const data = await res.json();
+            const folderSelect = document.getElementById("folderSelect");
+            folderSelect.innerHTML = "";
+            for (const folder in data) {
+                const opt = document.createElement("option");
+                opt.value = folder;
+                opt.text = folder;
+                folderSelect.appendChild(opt);
+            }
+            updateFiles();
+        }
+
+        async function updateFiles() {
+            const folder = document.getElementById("folderSelect").value;
+            const res = await fetch("/logs");
+            const files = (await res.json())[folder];
+            const fileSelect = document.getElementById("fileSelect");
+            fileSelect.innerHTML = "";
+            files.forEach(file => {
+                const opt = document.createElement("option");
+                opt.value = file;
+                opt.text = file;
+                fileSelect.appendChild(opt);
+            });
+        }
+
+        async function loadLog() {
+            const folder = document.getElementById("folderSelect").value;
+            const file = document.getElementById("fileSelect").value;
+            const res = await fetch(`/logs/${folder}/${file}`);
+            const data = await res.json();
+            document.getElementById("logOutput").innerText = data.content || "Erreur...";
+        }
+
+        document.getElementById("folderSelect").addEventListener("change", updateFiles);
+        window.onload = fetchLogs;
+    </script>
+</body>
+</html>

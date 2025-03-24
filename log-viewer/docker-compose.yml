@@ -1,0 +1,14 @@
+services:
+  log-viewer:
+    build: .
+    container_name: log-viewer
+    volumes:
+      - ../logs:/app/logs:ro
+    ports:
+      - 8000:5003
+    # labels:
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.logviewer.rule=Host(`logs.localhost`)"
+      # - "traefik.http.routers.logviewer.entrypoints=web"
+      # - "traefik.http.services.logviewer.loadbalancer.server.port=8000"
+    restart: unless-stopped

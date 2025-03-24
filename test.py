@@ -1,10 +1,10 @@
 import time
 from paho.mqtt import client as mqtt
 
-BROKER = "192.168.1.93"         # À adapter si besoin
-PORT_WS = 9001               # Port WebSocket
-USERNAME = "thib"            # À adapter
-PASSWORD = "maison13"        # À adapter
+BROKER = "192.168.1.2"         # À adapter si besoin
+PORT_WS = 9002               # Port WebSocket
+USERNAME = ""            # À adapter
+PASSWORD = ""        # À adapter
 TOPIC = "debug/hello"
 
 def main():

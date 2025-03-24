@@ -1,0 +1,4 @@
+logs/
+ssh
+conf/
+.env

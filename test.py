@@ -1,0 +1,25 @@
+import time
+from paho.mqtt import client as mqtt
+
+BROKER = "192.168.1.93"         # À adapter si besoin
+PORT_WS = 9001               # Port WebSocket
+USERNAME = "thib"            # À adapter
+PASSWORD = "maison13"        # À adapter
+TOPIC = "debug/hello"
+
+def main():
+	client = mqtt.Client(transport="websockets")
+	client.username_pw_set(USERNAME, PASSWORD)
+	client.connect(BROKER, PORT_WS)
+	client.loop_start()
+
+	counter = 0
+	while True:
+		message = f"🔁 Message {counter}"
+		client.publish(TOPIC, message)
+		print(f"📤 Publié sur {TOPIC} : {message}", flush=True)
+		counter += 1
+		time.sleep(3)
+
+if __name__ == "__main__":
+	main()

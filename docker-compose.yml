@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  mqtt-logger:
+    build:
+      context: .
+      args:
+        UID: ${UID}
+        GID: ${GID}
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./logs:/app/logs
+      - ./conf:/app/conf
+      - ./ssh/logs_mqtt_id_rsa:/app/.ssh/id_rsa:ro
+    env_file:
+      - .env
+    restart: unless-stopped

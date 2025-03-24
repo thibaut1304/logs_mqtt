@@ -144,7 +144,7 @@ Par défaut :
 
 ## 🚀 Intégration facile
 
-Dans n'importe quel script Python :
+### Dans n'importe quel script Python :
 
 ```python
 import paho.mqtt.publish as publish
@@ -153,6 +153,20 @@ publish.single("debug/mon-service", "Hello log", hostname="192.168.1.2", port=90
 
 Ensuite intégrer le topic `debug/mon-service` dans les topics de config.json 
 
+### Pour braucoup de logs :
+Creation d'un vraie client pour optimiser et éviter les connect publish et disconnect avec `publish.signle`
+
+```python
+import paho.mqtt.client as mqtt
+
+client = mqtt.Client(transport="websockets")
+client.connect("192.168.1.2", 9001)
+client.loop_start()
+
+client.publish("debug/mon-service", "Hello log")
+
+# client.loop_stop() et client.disconnect() quand fini
+```
 ---
 
 ## ✨ Résultat

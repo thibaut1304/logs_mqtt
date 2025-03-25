@@ -186,4 +186,52 @@ client.publish("debug/mon-service", "Hello log")
 - Authentification broker par clef
 - Ajout support ssl pour le broker
 
+# 🔐 Projet de Sécurisation du Broker MQTT
+
+## 🧠 Objectif
+
+Mettre en place une gestion **sécurisée, dynamique et granulaire** du broker MQTT (Mosquitto) :
+- 🔑 Authentification par **certificat TLS**
+- 🛂 Gestion des **droits par utilisateur**
+- 🎟️ Système de **licences**
+- 🌐 Interface Web de gestion
+- 📦 Intégration facile avec les autres projets (API, ESP32, Logger...)
+
+---
+
+## ✅ Ce que le système devra permettre
+
+### 🔐 1. Authentification par certificat
+- Utilisation de **certificats clients TLS**
+- Validation automatique ou manuelle des requêtes d'accès
+
+### 📜 2. ACL (droits par utilisateur)
+- Contrôle **lecture / écriture** par topic
+- Exemples :
+  - `viewer` ➜ lecture seule sur `logs/#`
+  - `logger_esp32` ➜ écriture sur `logs/esp32`
+
+### 🌍 3. Interface Web d’administration
+- Génération d’un **certificat utilisateur**
+- Affichage des utilisateurs + droits
+- Révocation d’un certificat (blacklist)
+- Téléchargement des fichiers nécessaires :
+  - `user.crt`, `user.key`, `ca.crt`
+
+### 📁 4. Stockage
+- Stocker les demandes / accès dans une **base SQLite**
+- Historique des connexions possible
+
+---
+
+## 🧱 Structure technique envisagée
+
+- `FastAPI` pour l'API web
+- `SQLite` pour la gestion des accès
+- `OpenSSL` (via `subprocess`) pour signer les certificats
+- `Mosquitto` avec :
+  - TLS activé (`listener 8883`) -> wss préféré
+  - ACL dynamiques (`use_identity_as_username`)
+  - Certificats côté serveur + clients
+
 ---
